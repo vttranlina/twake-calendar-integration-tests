@@ -567,6 +567,101 @@ public abstract class TeamCalendarSchedulingContract {
     }
 
     @Test
+    void organizerUpdateShouldUpdateInvitationMovedToTeamCalendar() {
+        // Given bobMember creates a personal meeting and invites aliceMember, who is a write-enabled Team Calendar member
+        String eventUid = "event-" + UUID.randomUUID();
+        String organizerEventIcs = calendarData(eventUid, bobMember.email(), List.of(aliceMember.email()), "Customer sizing meeting");
+        calDavClient.upsertCalendarEvent(bobMember, eventUid, organizerEventIcs);
+
+        CalendarURL aliceDefaultCalendar = CalendarURL.from(aliceMember.id());
+        URI aliceDefaultEventUri = awaitCalendarObjectUriByEventUid(aliceMember, aliceDefaultCalendar, eventUid);
+        CalendarURL aliceDelegatedTeamCalendar = calDavClient.findDelegatedCalendar(aliceMember, teamCalendar.id());
+        URI aliceTeamEventUri = aliceDelegatedTeamCalendar.eventHref(eventUid);
+
+        // And aliceMember moves her attendee copy from her personal calendar to the Team Calendar
+        assertThat(moveEvent(aliceMember, aliceDefaultEventUri, aliceTeamEventUri))
+            .as("Alice should be able to move the customer invitation to the Team Calendar")
+            .isIn(201, 204);
+
+        // When bobMember updates the organizer event
+        URI organizerEventUri = CalendarURL.from(bobMember.id()).eventHref(eventUid);
+        String updatedEventIcs = calDavClient.getCalendarEvent(bobMember, organizerEventUri)
+            .replace("SUMMARY:Customer sizing meeting", "SUMMARY:Customer sizing meeting updated");
+        calDavClient.upsertCalendarEvent(bobMember, organizerEventUri, updatedEventIcs);
+
+        // Then the moved Team Calendar event is updated and aliceMember's personal calendar stays empty
+        awaitAtMost.untilAsserted(() -> {
+            assertSoftly(softly -> {
+                softly.assertThat(readEventSummary(calDavClient.getCalendarEvent(aliceMember, aliceTeamEventUri)))
+                    .as("Organizer update should be applied to the attendee event moved to the Team Calendar")
+                    .isEqualTo("Customer sizing meeting updated");
+                softly.assertThat(calendarObjectUrisByEventUid(aliceMember, aliceDefaultCalendar, eventUid))
+                    .as("Organizer update should not recreate the attendee event in Alice's personal calendar")
+                    .hasSize(0);
+            });
+        });
+    }
+
+    @Test
+    void organizerCancelShouldCancelInvitationMovedToTeamCalendar() {
+        // Given bobMember invites aliceMember, who moves her attendee copy to the Team Calendar
+        String eventUid = "event-" + UUID.randomUUID();
+        calDavClient.upsertCalendarEvent(bobMember, eventUid,
+            calendarData(eventUid, bobMember.email(), List.of(aliceMember.email()), "Customer sizing meeting"));
+
+        CalendarURL aliceDefaultCalendar = CalendarURL.from(aliceMember.id());
+        URI aliceDefaultEventUri = awaitCalendarObjectUriByEventUid(aliceMember, aliceDefaultCalendar, eventUid);
+        CalendarURL aliceDelegatedTeamCalendar = calDavClient.findDelegatedCalendar(aliceMember, teamCalendar.id());
+        URI aliceTeamEventUri = aliceDelegatedTeamCalendar.eventHref(eventUid);
+        assertThat(moveEvent(aliceMember, aliceDefaultEventUri, aliceTeamEventUri))
+            .as("Alice should be able to move the customer invitation to the Team Calendar")
+            .isIn(201, 204);
+
+        // When bobMember cancels the organizer event
+        URI organizerEventUri = CalendarURL.from(bobMember.id()).eventHref(eventUid);
+        calDavClient.deleteCalendarEvent(bobMember, organizerEventUri);
+
+        // Then the moved event is cancelled without recreating an event in Alice's personal calendar
+        awaitAtMost.untilAsserted(() -> {
+            assertSoftly(softly -> {
+                softly.assertThat(CalendarUtil.toExtractor(calDavClient.getCalendarEvent(aliceMember, aliceTeamEventUri))
+                        .extractPropertyValue(Property.STATUS))
+                    .isEqualTo("CANCELLED");
+                softly.assertThat(calendarObjectUrisByEventUid(aliceMember, aliceDefaultCalendar, eventUid))
+                    .hasSize(0);
+            });
+        });
+    }
+
+    @ParameterizedTest
+    @ValueSource(booleans = {false, true})
+    void attendeeCopyMoveShouldBeRejectedWhenTeamCalendarAlreadyContainsUid(boolean canonicalDestination) {
+        // Given the Team Calendar contains the organizer copy and Alice has a personal attendee copy
+        String eventUid = "team-event-" + UUID.randomUUID();
+        calDavClient.upsertCalendarEvent(bobMember, bobMemberDelegatedCalendar, eventUid,
+            calendarData(eventUid, bobMember.email(), List.of(aliceMember.email()), "Existing Team Calendar meeting"));
+        URI personalEventUri = awaitCalendarObjectUriByEventUid(aliceMember, CalendarURL.from(aliceMember.id()), eventUid);
+        CalendarURL aliceTeamCalendar = calDavClient.findDelegatedCalendar(aliceMember, teamCalendar.id());
+        CalendarURL canonicalTeamCalendar = CalendarURL.from(teamCalendar.id());
+        CalendarURL destinationCalendar = canonicalDestination ? canonicalTeamCalendar : aliceTeamCalendar;
+        String personalBefore = calDavClient.getCalendarEvent(aliceMember, personalEventUri);
+        String teamBefore = calDavClient.getCalendarEvent(bobMember, canonicalTeamCalendar.eventHref(eventUid));
+
+        // When Alice moves to another filename or attempts to overwrite the existing organizer object
+        for (String destinationName : List.of("moved-" + eventUid, "moved+" + eventUid, eventUid)) {
+            assertThat(moveEvent(aliceMember, personalEventUri, destinationCalendar.eventHref(destinationName)))
+                .as("MOVE must reject an existing UID, regardless of destination filename or DAV mirror")
+                .isEqualTo(403);
+
+            // Then both copies are unchanged and no extra object is created in the Team Calendar
+            assertThat(calDavClient.getCalendarEvent(aliceMember, personalEventUri)).isEqualTo(personalBefore);
+            assertThat(calDavClient.getCalendarEvent(bobMember, canonicalTeamCalendar.eventHref(eventUid))).isEqualTo(teamBefore);
+            assertThat(calDavClient.getCalendarEvent(aliceMember, aliceTeamCalendar.eventHref(eventUid))).isEqualTo(teamBefore);
+            assertThat(calendarObjectUrisByEventUid(aliceMember, aliceTeamCalendar, eventUid)).hasSize(1);
+        }
+    }
+
+    @Test
     void writeMemberShouldNotMoveAttendeeCopyWithNonMemberOrganizerToTeamCalendar() {
         // Given nonMember creates a personal event that invites bobMember, a write-enabled Team Calendar member
         String eventUid = "personal-event-" + UUID.randomUUID();
@@ -1015,6 +1110,17 @@ public abstract class TeamCalendarSchedulingContract {
         return awaitAtMost.until(() -> calDavClient.findFirstUserCalendarObjectUriByEventUid(user, calendarURL, eventUid),
                 Optional::isPresent)
             .orElseThrow(() -> new AssertionError("Expected calendar object URI to be present for UID " + eventUid));
+    }
+
+    private List<URI> calendarObjectUrisByEventUid(OpenPaasUser user, CalendarURL calendarURL, String eventUid) {
+        return calDavClient.findUserCalendarObjectUrisByEventUid(user, calendarURL, eventUid)
+            .collectList()
+            .block();
+    }
+
+    private String readEventSummary(String icsContent) {
+        return CalendarUtil.toExtractor(icsContent)
+            .extractPropertyValue(Property.SUMMARY);
     }
 
     private String calendarData(String eventUid, String organizerEmail, List<String> attendeeEmails, String summary) {
