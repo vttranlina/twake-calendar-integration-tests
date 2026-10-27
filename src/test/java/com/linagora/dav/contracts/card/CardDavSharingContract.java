@@ -173,7 +173,7 @@ public abstract class CardDavSharingContract {
                         }
                     ],
                     "dav:group": null,
-                    "openpaas:source": "/addressbooks/{bobId}/collected.json"
+                    "openpaas:source": "/addressbooks/{bobId}/collected"
                 }
                 """.replace("{addressBook}", copiedAddressBook)
                 .replace("{aliceId}", alice.id())
@@ -225,7 +225,7 @@ public abstract class CardDavSharingContract {
                     .inPath("_embedded.dav:addressbook[2]")
                     .isEqualTo("""
                         {
-                            "openpaas:source": "/addressbooks/{aliceId}/{sourceAddressBookId}.json",
+                            "openpaas:source": "/addressbooks/{aliceId}/{sourceAddressBookId}",
                             "openpaas:subscription-type": "public",
                             "dav:name": "{resubscribedName}",
                             "dav:acl": {publicAcl}
@@ -317,7 +317,7 @@ public abstract class CardDavSharingContract {
                         }
                     ],
                     "dav:group": null,
-                    "openpaas:source": "/addressbooks/{bobId}/collected.json"
+                    "openpaas:source": "/addressbooks/{bobId}/collected"
                 }
                 """.replace("{addressBook}", copiedAddressBook)
                 .replace("{aliceId}", alice.id())
@@ -450,7 +450,7 @@ public abstract class CardDavSharingContract {
             .then()
             .extract().asString();
 
-        assertThat(response).doesNotContain("\"openpaas:source\":\"\\/addressbooks\\/" + bob.id() + "\\/collected.json\"");
+        assertThat(response).doesNotContain("\"openpaas:source\":\"\\/addressbooks\\/" + bob.id() + "\\/collected\"");
     }
 
     @Test
@@ -480,7 +480,7 @@ public abstract class CardDavSharingContract {
             .then()
             .extract().asString();
 
-        assertThat(response).doesNotContain("\"openpaas:source\":\"\\/addressbooks\\/" + bob.id() + "\\/" + addressBookURL.addressBookId() + ".json\"");
+        assertThat(response).doesNotContain("\"openpaas:source\":\"\\/addressbooks\\/" + bob.id() + "\\/" + addressBookURL.addressBookId() + "\"");
     }
 
     @Test

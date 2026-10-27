@@ -169,7 +169,7 @@ public abstract class CalJsonContract {
                 {
                     "_links": {
                         "self": {
-                            "href": "/calendars/%s.json"
+                            "href": "/calendars/%s"
                         }
                     },
                     "_embedded": {
@@ -177,7 +177,7 @@ public abstract class CalJsonContract {
                             {
                                 "_links": {
                                     "self": {
-                                        "href": "/calendars/%s/%s.json"
+                                        "href": "/calendars/%s/%s"
                                     }
                                 },
                                 "dav:name": "#default",
@@ -276,7 +276,7 @@ public abstract class CalJsonContract {
         // Then the response preserves the calendar listing envelope with an empty list
         assertThatJson(responseBody).isEqualTo("""
             {
-                "_links": {"self": {"href": "/calendars/${userId}.json"}},
+                "_links": {"self": {"href": "/calendars/${userId}"}},
                 "_embedded": {"dav:calendar": []}
             }
             """.replace("${userId}", alice.id()));
@@ -301,7 +301,7 @@ public abstract class CalJsonContract {
         // Then the empty result still has the same JSON shape as a non-empty listing
         assertThatJson(responseBody).isEqualTo("""
             {
-                "_links": {"self": {"href": "/calendars/${userId}.json"}},
+                "_links": {"self": {"href": "/calendars/${userId}"}},
                 "_embedded": {"dav:calendar": []}
             }
             """.replace("${userId}", alice.id()));
@@ -351,7 +351,7 @@ public abstract class CalJsonContract {
                 {
                             "_links": {
                                 "self": {
-                                    "href": "/calendars/%s/%s.json"
+                                    "href": "/calendars/%s/%s"
                                 }
                             },
                             "dav:name": "#default",
@@ -448,7 +448,7 @@ public abstract class CalJsonContract {
                 {
                     "_links": {
                         "self": {
-                            "href": "/calendars/%s/%s.json"
+                            "href": "/calendars/%s/%s"
                         }
                     },
                     "_embedded": {
@@ -1444,7 +1444,7 @@ public abstract class CalJsonContract {
                 {
                     "_links": {
                         "self": {
-                            "href": "/calendars/%s/%s.json"
+                            "href": "/calendars/%s/%s"
                         }
                     },
                     "_embedded": {
@@ -1594,7 +1594,7 @@ public abstract class CalJsonContract {
                 {
                     "_links": {
                         "self": {
-                            "href": "/calendars/%s/%s.json"
+                            "href": "/calendars/%s/%s"
                         }
                     },
                     "_embedded": {
@@ -2619,7 +2619,7 @@ public abstract class CalJsonContract {
                 {
                     "_links": {
                         "self": {
-                            "href": "/calendars/%s.json"
+                            "href": "/calendars/%s"
                         }
                     },
                     "_embedded": {
@@ -2627,7 +2627,7 @@ public abstract class CalJsonContract {
                             {
                                 "_links": {
                                     "self": {
-                                        "href": "/calendars/%s/%s.json"
+                                        "href": "/calendars/%s/%s"
                                     }
                                 },
                                 "dav:name": "#default",
@@ -2698,7 +2698,7 @@ public abstract class CalJsonContract {
                             {
                                 "_links": {
                                     "self": {
-                                        "href": "/calendars/%s/b5dd8eee-7ae3-45f5-834a-356025b1e877.json"
+                                        "href": "/calendars/%s/b5dd8eee-7ae3-45f5-834a-356025b1e877"
                                     }
                                 },
                                 "dav:name": "automated",
@@ -2962,7 +2962,7 @@ public abstract class CalJsonContract {
                 {
                     "_links": {
                         "self": {
-                            "href": "/calendars/%s.json"
+                            "href": "/calendars/%s"
                         }
                     },
                     "_embedded": {
@@ -2970,7 +2970,7 @@ public abstract class CalJsonContract {
                             {
                                 "_links": {
                                     "self": {
-                                        "href": "/calendars/%s/%s.json"
+                                        "href": "/calendars/%s/%s"
                                     }
                                 },
                                 "dav:name": "#default",
@@ -3041,7 +3041,7 @@ public abstract class CalJsonContract {
                             {
                                 "_links": {
                                     "self": {
-                                        "href": "/calendars/%s/b5dd8eee-7ae3-45f5-834a-356025b1e877.json"
+                                        "href": "/calendars/%s/b5dd8eee-7ae3-45f5-834a-356025b1e877"
                                     }
                                 },
                                 "dav:name": "automated 2",

@@ -65,7 +65,7 @@ public class SabreV4CalendarSharingTest extends CalendarSharingContract {
             .extract().jsonPath().getList("_embedded.'dav:calendar'._links.self.href");
 
         // Then the personal main calendar exists alongside the delegated calendar.
-        String defaultHref = "/calendars/" + recipient.id() + "/" + recipient.id() + ".json";
+        String defaultHref = "/calendars/" + recipient.id() + "/" + recipient.id();
         assertThat(hrefs).contains(defaultHref).hasSize(2).doesNotHaveDuplicates();
     }
 }

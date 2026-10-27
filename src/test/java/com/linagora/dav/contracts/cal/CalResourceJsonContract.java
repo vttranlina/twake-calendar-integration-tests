@@ -176,7 +176,7 @@ public abstract class CalResourceJsonContract {
 
         assertThatJson(body)
             .when(Option.IGNORING_EXTRA_FIELDS)
-            .node("_links.self.href").isEqualTo("/calendars/" + resource.id() + ".json");
+            .node("_links.self.href").isEqualTo("/calendars/" + resource.id());
 
         assertThat(body).contains("dav:calendar");
     }

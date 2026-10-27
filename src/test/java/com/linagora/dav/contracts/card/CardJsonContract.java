@@ -85,7 +85,7 @@ public abstract class CardJsonContract {
                 {
                     "_links": {
                         "self": {
-                            "href": "/addressbooks/%s.json"
+                            "href": "/addressbooks/%s"
                         }
                     },
                     "_embedded": {
@@ -93,7 +93,7 @@ public abstract class CardJsonContract {
                             {
                                 "_links": {
                                     "self": {
-                                        "href": "/addressbooks/%s/collected.json"
+                                        "href": "/addressbooks/%s/collected"
                                     }
                                 },
                                 "dav:name": "",
@@ -119,7 +119,7 @@ public abstract class CardJsonContract {
                             {
                                 "_links": {
                                     "self": {
-                                        "href": "/addressbooks/%s/contacts.json"
+                                        "href": "/addressbooks/%s/contacts"
                                     }
                                 },
                                 "dav:name": "",
@@ -208,7 +208,7 @@ public abstract class CardJsonContract {
                     {
                         "_links": {
                             "self": {
-                                "href": "/addressbooks/{bobId}/contacts.json"
+                                "href": "/addressbooks/{bobId}/contacts"
                             }
                         },
                         "numberOfContacts": 1
@@ -243,9 +243,9 @@ public abstract class CardJsonContract {
                     "dav:addressbook",
                     "numberOfContacts",
                     "openpaas:source",
-                    "/addressbooks/" + bob.id() + "/contacts.json",
-                    "/addressbooks/" + cedric.id() + "/contacts.json",
-                    "/addressbooks/" + cedric.id() + "/collected.json");
+                    "/addressbooks/" + bob.id() + "/contacts",
+                    "/addressbooks/" + cedric.id() + "/contacts",
+                    "/addressbooks/" + cedric.id() + "/collected");
         }
     }
 
@@ -277,7 +277,7 @@ public abstract class CardJsonContract {
 
         assertThatJson(response)
             .inPath("_embedded.dav:addressbook[0]._links.self.href")
-            .isEqualTo("/addressbooks/" + bob.id() + "/contacts.json");
+            .isEqualTo("/addressbooks/" + bob.id() + "/contacts");
     }
 
     @Test
@@ -385,7 +385,7 @@ public abstract class CardJsonContract {
             {
                 "_links": {
                     "self": {
-                        "href": "/addressbooks/%s/contacts.json"
+                        "href": "/addressbooks/%s/contacts"
                     }
                 },
                 "dav:syncToken": 1,
@@ -481,7 +481,7 @@ public abstract class CardJsonContract {
             {
                  "_links": {
                      "self": {
-                         "href": "/addressbooks/%s/contacts.json"
+                         "href": "/addressbooks/%s/contacts"
                      }
                  },
                  "dav:syncToken": 2,
@@ -776,7 +776,7 @@ public abstract class CardJsonContract {
                 {
                       "_links": {
                           "self": {
-                              "href": "/addressbooks/%s/contacts.json"
+                              "href": "/addressbooks/%s/contacts"
                           }
                       },
                       "dav:syncToken": 2,
@@ -1010,7 +1010,7 @@ public abstract class CardJsonContract {
                 {
                        "_links": {
                            "self": {
-                               "href": "/addressbooks/%s/contacts.json"
+                               "href": "/addressbooks/%s/contacts"
                            }
                        },
                        "dav:syncToken": 3,
@@ -1210,7 +1210,7 @@ public abstract class CardJsonContract {
                 {
                     "_links": {
                         "self": {
-                            "href": "/addressbooks/%s.json"
+                            "href": "/addressbooks/%s"
                         }
                     },
                     "_embedded": {
@@ -1218,7 +1218,7 @@ public abstract class CardJsonContract {
                             {
                                 "_links": {
                                     "self": {
-                                        "href": "/addressbooks/%s/86dcbff9-c748-4338-8051-6071b4389586.json"
+                                        "href": "/addressbooks/%s/86dcbff9-c748-4338-8051-6071b4389586"
                                     }
                                 },
                                 "dav:name": "evb",
@@ -1244,7 +1244,7 @@ public abstract class CardJsonContract {
                             {
                                 "_links": {
                                     "self": {
-                                        "href": "/addressbooks/%s/collected.json"
+                                        "href": "/addressbooks/%s/collected"
                                     }
                                 },
                                 "dav:name": "",
@@ -1270,7 +1270,7 @@ public abstract class CardJsonContract {
                             {
                                 "_links": {
                                     "self": {
-                                        "href": "/addressbooks/%s/contacts.json"
+                                        "href": "/addressbooks/%s/contacts"
                                     }
                                 },
                                 "dav:name": "",
@@ -1354,7 +1354,7 @@ public abstract class CardJsonContract {
                 {
                     "_links": {
                         "self": {
-                            "href": "/addressbooks/%s.json"
+                            "href": "/addressbooks/%s"
                         }
                     },
                     "_embedded": {
@@ -1362,7 +1362,7 @@ public abstract class CardJsonContract {
                             {
                                 "_links": {
                                     "self": {
-                                        "href": "/addressbooks/%s/86dcbff9-c748-4338-8051-6071b4389586.json"
+                                        "href": "/addressbooks/%s/86dcbff9-c748-4338-8051-6071b4389586"
                                     }
                                 },
                                 "dav:name": "custom 3",
@@ -1388,7 +1388,7 @@ public abstract class CardJsonContract {
                             {
                                 "_links": {
                                     "self": {
-                                        "href": "/addressbooks/%s/collected.json"
+                                        "href": "/addressbooks/%s/collected"
                                     }
                                 },
                                 "dav:name": "",
@@ -1414,7 +1414,7 @@ public abstract class CardJsonContract {
                             {
                                 "_links": {
                                     "self": {
-                                        "href": "/addressbooks/%s/contacts.json"
+                                        "href": "/addressbooks/%s/contacts"
                                     }
                                 },
                                 "dav:name": "",
@@ -1492,7 +1492,7 @@ public abstract class CardJsonContract {
                 {
                     "_links": {
                         "self": {
-                            "href": "/addressbooks/%s.json"
+                            "href": "/addressbooks/%s"
                         }
                     },
                     "_embedded": {
@@ -1500,7 +1500,7 @@ public abstract class CardJsonContract {
                             {
                                 "_links": {
                                     "self": {
-                                        "href": "/addressbooks/%s/collected.json"
+                                        "href": "/addressbooks/%s/collected"
                                     }
                                 },
                                 "dav:name": "",
@@ -1526,7 +1526,7 @@ public abstract class CardJsonContract {
                             {
                                 "_links": {
                                     "self": {
-                                        "href": "/addressbooks/%s/contacts.json"
+                                        "href": "/addressbooks/%s/contacts"
                                     }
                                 },
                                 "dav:name": "",
@@ -1629,7 +1629,7 @@ public abstract class CardJsonContract {
                 {
                     "_links": {
                         "self": {
-                            "href": "/addressbooks/%s/contacts.json"
+                            "href": "/addressbooks/%s/contacts"
                         }
                     },
                     "dav:syncToken": 2,
@@ -1727,7 +1727,7 @@ public abstract class CardJsonContract {
                 {
                     "_links": {
                         "self": {
-                            "href": "/addressbooks/%s/contacts.json"
+                            "href": "/addressbooks/%s/contacts"
                         }
                     },
                     "dav:syncToken": 2,
@@ -2324,7 +2324,7 @@ public abstract class CardJsonContract {
                 {
                     "_links": {
                         "self": {
-                            "href": "/addressbooks/BOB_ID.json"
+                            "href": "/addressbooks/BOB_ID"
                         }
                     },
                     "_embedded": {
@@ -2332,7 +2332,7 @@ public abstract class CardJsonContract {
                             {
                                 "_links": {
                                     "self": {
-                                        "href": "/addressbooks/BOB_ID/collected.json"
+                                        "href": "/addressbooks/BOB_ID/collected"
                                     }
                                 },
                                 "dav:name": "",
@@ -2358,7 +2358,7 @@ public abstract class CardJsonContract {
                             {
                                 "_links": {
                                     "self": {
-                                        "href": "/addressbooks/BOB_ID/contacts.json"
+                                        "href": "/addressbooks/BOB_ID/contacts"
                                     }
                                 },
                                 "dav:name": "",
@@ -2384,7 +2384,7 @@ public abstract class CardJsonContract {
                             {
                                 "_links": {
                                     "self": {
-                                        "href": "/addressbooks/BOB_ID/a72cf3f8-0dc2-4416-bf66-43e5aeaeff24.json"
+                                        "href": "/addressbooks/BOB_ID/a72cf3f8-0dc2-4416-bf66-43e5aeaeff24"
                                     }
                                 },
                                 "dav:name": "",
@@ -2411,7 +2411,7 @@ public abstract class CardJsonContract {
                                     }
                                 ],
                                 "dav:group": null,
-                                "openpaas:source": "/addressbooks/ALICE_ID/contacts.json"
+                                "openpaas:source": "/addressbooks/ALICE_ID/contacts"
                             }
                         ]
                     }

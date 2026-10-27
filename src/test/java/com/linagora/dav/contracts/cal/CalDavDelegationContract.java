@@ -160,7 +160,7 @@ public abstract class CalDavDelegationContract {
             .get("/calendars/" + alice.id())
         .then()
             .extract().asString();
-        String delegatedSource = "/calendars/" + bob.id() + "/" + bob.id() + ".json";
+        String delegatedSource = "/calendars/" + bob.id() + "/" + bob.id();
         assertThatJson(response)
             .inPath("_embedded.dav:calendar")
             .isArray()
@@ -302,7 +302,7 @@ public abstract class CalDavDelegationContract {
     }
 
     // Sharees read the events of a shared calendar through the owner's path
-    // (calendarserver:delegatedsource), e.g. REPORT /calendars/{ownerId}/{calendarId}.json.
+    // (calendarserver:delegatedsource), e.g. REPORT /calendars/{ownerId}/{calendarId}.
     // Sharees with read, read-write or administration access are granted {DAV:}read on the
     // owner's calendar node and its events. Writing there stays forbidden, and private calendars
     // stay unreadable for anyone else.
@@ -883,7 +883,7 @@ public abstract class CalDavDelegationContract {
 
 
         // THEN a copy of bob calendar is removed from Alice calendar list
-        assertThat(response).doesNotContain("\"calendarserver:delegatedsource\":\"\\/calendars\\/" + bob.id() + "\\/" + bob.id() + ".json\"");
+        assertThat(response).doesNotContain("\"calendarserver:delegatedsource\":\"\\/calendars\\/" + bob.id() + "\\/" + bob.id() + "\"");
     }
 
     @ParameterizedTest(name = "{0}")
@@ -913,7 +913,7 @@ public abstract class CalDavDelegationContract {
                     {
                         "_links": {
                             "self": {
-                                "href": "/calendars/{ownerId}/{ownerId}.json"
+                                "href": "/calendars/{ownerId}/{ownerId}"
                             }
                         },
                         "invite": [
@@ -2540,7 +2540,7 @@ public abstract class CalDavDelegationContract {
                 {
                     "_links": {
                         "self": {
-                            "href": "/calendars/{userId2}/{userId2}.json"
+                            "href": "/calendars/{userId2}/{userId2}"
                         }
                     },
                     "dav:name": "#default",
@@ -2653,7 +2653,7 @@ public abstract class CalDavDelegationContract {
                 {
                     "_links": {
                         "self": {
-                            "href": "/calendars/{userId2}/{userId2}.json"
+                            "href": "/calendars/{userId2}/{userId2}"
                         }
                     },
                     "dav:name": "#default",
@@ -2797,7 +2797,7 @@ public abstract class CalDavDelegationContract {
             .extract().asString();
 
         // THEN the right is updated in Alice local copy of Bob original calendar
-        String delegatedSource = "/calendars/" + bob.id() + "/" + bob.id() + ".json";
+        String delegatedSource = "/calendars/" + bob.id() + "/" + bob.id();
         assertThatJson(response)
             .inPath("_embedded.dav:calendar")
             .isArray()
@@ -2812,7 +2812,7 @@ public abstract class CalDavDelegationContract {
                             "href": "${json-unit.ignore}"
                         }
                     },
-                    "calendarserver:delegatedsource": "/calendars/{userId2}/{userId2}.json",
+                    "calendarserver:delegatedsource": "/calendars/{userId2}/{userId2}",
                     "dav:name": "#default",
                     "calendarserver:ctag": "http://sabre.io/ns/sync/1",
                     "invite": [
@@ -3593,7 +3593,7 @@ public abstract class CalDavDelegationContract {
         // AND Alice's calendar list (JSON response) contains the delegated calendar copy
         String jsonAliceCalendars = calDavClient.getUserCalendarsJson(alice);
         assertThat(jsonAliceCalendars)
-            .contains("\"calendarserver:delegatedsource\":\"\\/calendars\\/" + bob.id() + "\\/" + bob.id() + ".json\"");
+            .contains("\"calendarserver:delegatedsource\":\"\\/calendars\\/" + bob.id() + "\\/" + bob.id() + "\"");
 
         CalendarURL calendarURL = calDavClient.findDelegatedCalendar(alice, bob.id());
 
@@ -3608,7 +3608,7 @@ public abstract class CalDavDelegationContract {
         String updatedJsonAliceCalendars = calDavClient.getUserCalendarsJson(alice);
 
         assertThat(updatedJsonAliceCalendars)
-            .doesNotContain("\"calendarserver:delegatedsource\":\"\\/calendars\\/" + bob.id() + "\\/" + bob.id() + ".json\"");
+            .doesNotContain("\"calendarserver:delegatedsource\":\"\\/calendars\\/" + bob.id() + "\\/" + bob.id() + "\"");
 
         // AND the copy no longer appears in Alice's calendar list (XML response)
         List<String> updatedXmlAliceCalendars = getXmlCalendars(alice);

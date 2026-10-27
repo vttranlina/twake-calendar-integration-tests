@@ -221,7 +221,7 @@ public class CardDavClient {
     }
 
     public Optional<AddressBookURL> findSubscribedAddressBook(OpenPaasUser user, String sourceUserId, String sourceAddressBookId) {
-        String source = new AddressBookURL(sourceUserId, sourceAddressBookId).asUri() + ".json";
+        String source = new AddressBookURL(sourceUserId, sourceAddressBookId).asUri().toString();
         JsonNode response = given()
             .header("Authorization", user.impersonatedBasicAuth())
             .queryParam("inviteStatus", 2)
@@ -246,7 +246,7 @@ public class CardDavClient {
     }
 
     public String getAddressBookName(OpenPaasUser user, AddressBookURL addressBook) {
-        String selfHref = addressBook.asUri() + ".json";
+        String selfHref = addressBook.asUri().toString();
         JsonNode response = given()
             .header("Authorization", user.impersonatedBasicAuth())
             .queryParam("personal", true)

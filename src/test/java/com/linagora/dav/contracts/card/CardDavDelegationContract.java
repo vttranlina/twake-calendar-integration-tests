@@ -347,7 +347,7 @@ public abstract class CardDavDelegationContract {
                         }
                     ],
                     "dav:group": null,
-                    "openpaas:source": "/addressbooks/{bobId}/collected.json"
+                    "openpaas:source": "/addressbooks/{bobId}/collected"
                 }
                 """.replace("{aliceId}", alice.id()))
                 .replace("{bobId}", bob.id()));
@@ -374,7 +374,7 @@ public abstract class CardDavDelegationContract {
             .extract().asString();
 
         // THEN Bob's address book is removed from Alice's address book list
-        assertThat(response).doesNotContain("\"openpaas:source\":\"\\/addressbooks\\/" + bob.id() + "\\/collected.json\"");
+        assertThat(response).doesNotContain("\"openpaas:source\":\"\\/addressbooks\\/" + bob.id() + "\\/collected\"");
     }
 
     @Test
@@ -402,7 +402,7 @@ public abstract class CardDavDelegationContract {
                 {
                     "_links": {
                         "self": {
-                            "href": "/addressbooks/{bobId}/collected.json"
+                            "href": "/addressbooks/{bobId}/collected"
                         }
                     },
                     "dav:name": "",
@@ -492,7 +492,7 @@ public abstract class CardDavDelegationContract {
     @EnumSource(DelegationRight.class)
     protected void userShouldKeepDelegationAfterResubscribingToHiddenAddressBook(DelegationRight right) {
         String sourceAddressBookId = "collected";
-        String sourceHref = "/addressbooks/" + alice.id() + "/" + sourceAddressBookId + ".json";
+        String sourceHref = "/addressbooks/" + alice.id() + "/" + sourceAddressBookId;
         String resubscribedName = "Resubscribed address book";
 
         // GIVEN Alice shares a hidden address book containing a contact with Bob
@@ -540,7 +540,7 @@ public abstract class CardDavDelegationContract {
                     .inPath("_embedded.dav:addressbook[2]")
                     .isEqualTo("""
                         {
-                            "openpaas:source": "/addressbooks/{aliceId}/{sourceAddressBookId}.json",
+                            "openpaas:source": "/addressbooks/{aliceId}/{sourceAddressBookId}",
                             "openpaas:subscription-type": "delegation",
                             "dav:share-access": {shareAccess},
                             "dav:name": "{resubscribedName}"
@@ -1225,7 +1225,7 @@ public abstract class CardDavDelegationContract {
                 {
                     "_links": {
                         "self": {
-                            "href": "/addressbooks/{bobId}/collected.json"
+                            "href": "/addressbooks/{bobId}/collected"
                         }
                     },
                     "dav:name": "",
@@ -1405,7 +1405,7 @@ public abstract class CardDavDelegationContract {
                 {
                     "_links": {
                         "self": {
-                            "href": "/addressbooks/{bobId}/collected.json"
+                            "href": "/addressbooks/{bobId}/collected"
                         }
                     },
                     "dav:name": "",
@@ -1599,7 +1599,7 @@ public abstract class CardDavDelegationContract {
                         }
                     ],
                     "dav:group": null,
-                    "openpaas:source": "/addressbooks/{bobId}/collected.json"
+                    "openpaas:source": "/addressbooks/{bobId}/collected"
                 }
                 """.replace("{cedricId}", cedric.id())
                 .replace("{bobId}", bob.id()));
